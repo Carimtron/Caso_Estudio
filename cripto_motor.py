@@ -1,4 +1,4 @@
-# cripto_motor.py
+# cripto_motor.py (este código se aplica a las dos máquinas virtuales) 
 # Este archivo contiene la lógica del Algoritmo Polimórfico de 64 bits
 
 import secrets
@@ -7,7 +7,7 @@ def generar_llave_64():
     """Genera una llave aleatoria de 64 bits (8 bytes) de alta entropía."""
     return secrets.token_bytes(8)
 
-# --- FUNCIONES POLIMÓRFICAS (Inciso C) ---
+# --- FUNCIONES POLIMÓRFICAS ---
 
 def aplicar_xor(dato, llave):
     """Función 0: Operación XOR estándar (Base de OTP)"""
