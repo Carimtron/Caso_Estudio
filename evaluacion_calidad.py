@@ -48,10 +48,10 @@ def ejecutar_test_robusto(n=10000):
     print("\n" + "="*50)
     # Criterio de éxito: Cero duplicados y una entropía superior al umbral de seguridad (7.5)
     if len(duplicados) == 0 and entropia > 7.5:
-        print("[!] VERDICTO: CALIDAD ALTA - APTO PARA DESPLIEGUE IoT")
+        print("[!] VEREDICTO: CALIDAD ALTA - APTO PARA DESPLIEGUE IoT")
         print("    La generación basada en 'secrets' es criptográficamente segura.")
     else:
-        print("[!] VERDICTO: CALIDAD INSUFICIENTE")
+        print("[!] VEREDICTO: CALIDAD INSUFICIENTE")
     print("="*50)
 
 if __name__ == "__main__":
