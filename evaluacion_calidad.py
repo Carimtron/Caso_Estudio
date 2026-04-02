@@ -1,4 +1,4 @@
-# evaluacion_calidad.py
+# evaluacion_calidad.py # Realizando la prueba en la maquina ubuntu 
 import cripto_motor # Importamos nuestro motor para usar la función de generación de llaves
 import collections  # Necesario para contar frecuencias de elementos y detectar duplicados
 import math         # Utilizado para realizar el cálculo logarítmico de la entropía
