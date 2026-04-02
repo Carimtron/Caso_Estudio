@@ -1,0 +1,68 @@
+# cripto_motor.py
+# Este archivo contiene la lógica del Algoritmo Polimórfico de 64 bits
+
+import secrets
+
+def generar_llave_64():
+    """Genera una llave aleatoria de 64 bits (8 bytes) de alta entropía."""
+    return secrets.token_bytes(8)
+
+# --- FUNCIONES POLIMÓRFICAS (Inciso C) ---
+
+def aplicar_xor(dato, llave):
+    """Función 0: Operación XOR estándar (Base de OTP)"""
+    return bytes([d ^ l for d, l in zip(dato, llave)])
+
+def aplicar_not_xor(dato, llave):
+    """Función 1: Inversión de bits (NOT) seguida de un XOR"""
+    dato_invertido = bytes([(~d & 0xFF) for d in dato])
+    return bytes([d ^ l for d, l in zip(dato_invertido, llave)])
+
+def aplicar_swap_xor(dato, llave):
+    """Función 2: Intercambio de mitades (4 bytes) y luego XOR"""
+    dato_swapped = dato[4:] + dato[:4]
+    return bytes([d ^ l for d, l in zip(dato_swapped, llave)])
+
+def aplicar_shift_xor(dato, llave):
+    """Función 3: Desplazamiento circular de bits a la izquierda y XOR"""
+    # Convertimos a entero para desplazar bits fácilmente
+    val = int.from_bytes(dato, byteorder='big')
+    # Desplazamiento circular de 3 bits
+    shifted = ((val << 3) & 0xFFFFFFFFFFFFFFFF) | (val >> (64 - 3))
+    dato_shifted = shifted.to_bytes(8, byteorder='big')
+    return bytes([d ^ l for d, l in zip(dato_shifted, llave)])
+
+# --- DICCIONARIO DE SELECCIÓN ---
+# Esto permite que el sistema sea polimórfico
+FUNCIONES = {
+    0: aplicar_xor,
+    1: aplicar_not_xor,
+    2: aplicar_swap_xor,
+    3: aplicar_shift_xor
+}
+
+def cifrar_polimorfico(mensaje, llave, id_funcion):
+    """Aplica la función seleccionada para cifrar el mensaje."""
+    if id_funcion in FUNCIONES:
+        return FUNCIONES[id_funcion](mensaje, llave)
+    return None
+
+def descifrar_polimorfico(criptograma, llave, id_funcion):
+    """Revierte la función seleccionada para recuperar el mensaje original."""
+    # Para XOR, la inversa de XOR es XOR. 
+    # Pero para NOT y SWAP debemos aplicar la inversa ANTES o DESPUÉS.
+    
+    # Primero quitamos el XOR (que es la capa externa)
+    temp = bytes([c ^ l for c, l in zip(criptograma, llave)])
+    
+    if id_funcion == 0: # XOR simple
+        return temp
+    elif id_funcion == 1: # Inversa de NOT es NOT
+        return bytes([(~t & 0xFF) for t in temp])
+    elif id_funcion == 2: # Inversa de SWAP (mitades) es SWAP otra vez
+        return temp[4:] + temp[:4]
+    elif id_funcion == 3: # Inversa de Shift Left 3 es Shift Right 3
+        val = int.from_bytes(temp, byteorder='big')
+        unshared = ((val >> 3) | (val << (64 - 3))) & 0xFFFFFFFFFFFFFFFF
+        return unshared.to_bytes(8, byteorder='big')
+    return None
