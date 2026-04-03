@@ -22,7 +22,7 @@ def ejecutar_test_robusto(n=10000):
     llaves = [] # Lista para almacenar cada llave completa y buscar colisiones
     bits_totales = bytearray() # Acumulador de todos los bytes para el análisis estadístico
 
-    # --- MODIFICACIÓN PARA RÚBRICA: Generación de la Tabla de Llaves ---
+    # --- Generación de la Tabla de Llaves ---
     # Creamos un archivo .txt para documentar las llaves generadas de forma eficiente
     with open("tabla_llaves.txt", "w") as archivo_tabla:
         archivo_tabla.write(f"REPORTE TECNICO: TABLA DE {n} LLAVES DE 64-BIT\n")
