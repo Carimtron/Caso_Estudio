@@ -22,22 +22,32 @@ def ejecutar_test_robusto(n=10000):
     llaves = [] # Lista para almacenar cada llave completa y buscar colisiones
     bits_totales = bytearray() # Acumulador de todos los bytes para el análisis estadístico
 
-    for _ in range(n):
-        # Generamos una llave de 64 bits usando nuestro motor criptográfico
-        llave = cripto_motor.generar_llave_64()
-        llaves.append(llave) # Guardamos la llave para el conteo de duplicados
-        bits_totales.extend(llave) # Añadimos los bytes a la muestra global de entropía
+    # --- MODIFICACIÓN PARA RÚBRICA: Generación de la Tabla de Llaves ---
+    # Creamos un archivo .txt para documentar las llaves generadas de forma eficiente
+    with open("tabla_llaves.txt", "w") as archivo_tabla:
+        archivo_tabla.write(f"REPORTE TECNICO: TABLA DE {n} LLAVES DE 64-BIT\n")
+        archivo_tabla.write("="*50 + "\n")
+        
+        for i in range(n):
+            # Generamos la llave de 64 bits usando nuestro motor criptográfico
+            llave = cripto_motor.generar_llave_64()
+            llaves.append(llave)
+            bits_totales.extend(llave)
+            
+            # Escribimos la llave en formato hexadecimal en nuestra tabla física
+            archivo_tabla.write(f"ID: {i+1:05d} | LLAVE (HEX): {llave.hex()}\n")
 
-    # 1. Prueba de Colisiones (Repeticiones): Contamos cuántas veces se repite cada llave
+    # 1. Prueba de Colisiones (Repeticiones)
     conteo = collections.Counter(llaves)
-    # Filtramos aquellas llaves cuyo conteo sea mayor a 1 (lo ideal es que sea 0)
     duplicados = [l for l, c in conteo.items() if c > 1]
     
-    # 2. Análisis de Entropía: Evaluamos la incertidumbre de los datos generados
+    # 2. Análisis de Entropía
     entropia = calcular_entropia(bits_totales)
 
-    print(f"[+] Análisis de Colisiones:")
-    # len(set(llaves)) nos da la cantidad de llaves únicas encontradas
+    print(f"[+] Generación de Tabla:")
+    print(f"    - Archivo creado: tabla_llaves.txt") 
+
+    print(f"\n[+] Análisis de Colisiones:")
     print(f"    - Llaves Únicas: {len(set(llaves))}")
     print(f"    - Llaves Duplicadas: {len(duplicados)}")
     
