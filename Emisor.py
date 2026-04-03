@@ -18,7 +18,7 @@ def iniciar_emisor():
 
             # --- Implementación de todos los tipos de intercambio ---
             # Definimos una lista con los diferentes tipos de mensajes requeridos
-            tipos_mensajes = ["PROYECTO", "PROYECTO1", "PROYECTO2", "PROYECTO3"]
+            tipos_mensajes = ["CASO_ES1", "CASO_ES2", "CASO_ES3", "CASO_ES4"]
             
             # Seleccionamos un mensaje al azar de la lista anterior
             mensaje_texto = random.choice(tipos_mensajes) 
